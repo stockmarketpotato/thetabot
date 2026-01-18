@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<div th:replace="~{fragments/headerfiles :: header}"></div>
+<title th:utext="#{label.form.title}">form</title>
+<script type="text/javascript" th:src="@{/js/pwstrength.js}"></script>
+</head>
+<body>
+  <div th:replace="~{fragments/header :: header}"></div>
+  <main role="main" class="container">
+    <div th:if="${message != null}" class="alert alert-info" th:utext="${message}">message</div>
+    <div th:if="${error != null}" class="alert alert-danger" th:utext="${session[SPRING_SECURITY_LAST_EXCEPTION]}">error</div>
+    <h1 th:text="#{label.form.title}">form</h1>
+    <br />
+    <form id="myForm" name="myForm" method="POST" th:action="@{/user/registration}" th:object="${user}" enctype="utf8">
+      <div class="form-group row">
+        <label for="email" class="col-sm-3" th:utext="#{label.user.email}">email</label> <span class="col-sm-5">
+          <input th:field="${user.email}" id="email" type="email" class="form-control" name="email" value=""
+          required="required" />
+        </span> <span id="emailError" class="alert alert-danger col-sm-4" style="display: none"> </span>
+      </div>
+      <div class="form-group row">
+        <label for="password" class="col-sm-3" th:utext="#{label.user.password}">password</label> <span class="col-sm-5">
+          <input th:field="${user.password}" id="password" class="form-control" name="password" value="" type="password"
+          required="required" autocomplete="new-password" />
+        </span> <span id="passwordError" class="alert alert-danger col-sm-4" style="display: none"></span>
+      </div>
+      <div class="form-group row">
+        <label for="matchingPassword" class="col-sm-3" th:utext="#{label.user.confirmPass}">confirm</label> <span
+          class="col-sm-5"> <input th:field="${user.matchingPassword}" id="matchPassword" class="form-control"
+          name="matchPassword" value="" type="password" required="required" autocomplete="new-password" /></span> <span
+          id="globalError" class="alert alert-danger col-sm-4" style="display: none"></span>
+      </div>
+      <br />
+      <button type="submit" class="btn btn-primary" th:utext="#{label.form.submit}">submit</button>
+    </form>
+    <br /> <a th:href="@{/login}" th:utext="#{label.form.loginLink}">login</a>
+  </main>
+  <script th:inline="javascript">
+$(document).ready(function () {
+// $('#myForm').on('submit', function () {
+  $('form').submit(function(event) {
+    register(event);
+  });
+  
+  $(":password").keyup(function(){
+    if($("#password").val() != $("#matchPassword").val()){
+          $("#globalError").show().html(/*[[#{PasswordMatches.user}]]*/);
+      }else{
+        $("#globalError").html("").hide();
+      }
+  });
+  
+  options = {
+        common: {minChar:8},
+        ui: {
+          showVerdictsInsideProgressBar:true,
+          showErrors:true,
+          errorMessages:{
+              wordLength: /*[[#{error.wordLength}]]*/,
+              wordNotEmail: /*[[#{error.wordNotEmail}]]*/,
+              wordSequences: /*[[#{error.wordSequences}]]*/,
+              wordLowercase: /*[[#{error.wordLowercase}]]*/,
+              wordUppercase: /*[[#{error.wordUppercase}]]*/,
+              wordOneNumber: /*[[#{error.wordOneNumber}]]*/,
+              wordOneSpecialChar: /*[[#{error.wordOneSpecialChar}]]*/
+            }
+          }
+    };
+   $('#password').pwstrength(options);
+});
+
+function register(event){
+	event.preventDefault();
+    $(".alert").html("").hide();
+    $(".error-list").html("");
+    if($("#password").val() != $("#matchPassword").val()){
+    	$("#globalError").show().html(/*[[#{PasswordMatches.user}]]*/);
+    	return;
+    }
+    event.currentTarget.submit();
+}
+
+</script>
+  <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

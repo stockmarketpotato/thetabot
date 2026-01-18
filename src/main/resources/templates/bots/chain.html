@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<div th:replace="~{fragments/headerfiles :: header}"></div>
+<title>ThetaBot - Accounts and Positions</title>
+</head>
+<body>
+  <div th:replace="~{fragments/header :: header}"></div>
+  <main role="main" class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <h2>
+          Option Chain for <span th:text="${symbol}"></span>
+        </h2>
+        <div th:each="o : ${chain}">
+          <p th:text="${o.getUnderlyingSymbol()}"></p>
+          <p th:text="${o.getRootSymbol()}"></p>
+          <p th:text="${o.getExerciseStyle()}"></p>
+          <p th:text="${quotes.size()}"></p>
+          <div class="accordion" id="accordionExample">
+            <div class="accordion-item text-center" th:each="e : ${o.getExpirations()}">
+              <h2 class="accordion-header fs-5" th:attr="id=@{'headingDte' + ${e.getDaysToExpiration()}}">
+                <button class="accordion-button text-center" type="button" data-bs-toggle="collapse"
+                  aria-expanded="true"
+                  th:attr="data-bs-target=@{'#collapseDte' + ${e.getDaysToExpiration()}},aria-controls=@{'collapseDte' + ${e.getDaysToExpiration()}}"
+                  th:text="@{${e.getDaysToExpiration()} + ' DTE (' + ${e.getUnderlyingSymbol()} + ')'}">Accordion
+                  Item #1</button>
+              </h2>
+              <div
+                th:attr="id=@{'collapseDte' + ${e.getDaysToExpiration()}},aria-labelledby=@{'headingDte' + ${e.getDaysToExpiration()}}"
+                class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body fs-6">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th>Strike Price</th>
+                        <th>Bid</th>
+                        <th></th>
+                        <th>Ask</th>
+                        <th></th>
+                        <th>Delta</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="s : ${e.getStrikes()}">
+                        <td th:text="${s.getStrikePrice()}"></td>
+                        <td th:if="${quotes.containsKey(s.getPut())}" th:text="${quotes.get(s.getPut()).getBidPriceAsString()}"></td>
+                        <td th:if="${quotes.containsKey(s.getPut())}">
+                          <span class="badge rounded-pill bg-secondary" th:text="${#dates.format(quotes.get(s.getPut()).getBidTime(), 'HH:mm - dd. MMM yyyy')}"></span>
+                        </td>
+                        <td th:if="${quotes.containsKey(s.getPut())}" th:text="${quotes.get(s.getPut()).getAskPriceAsString()}"></td>
+                        <td th:if="${quotes.containsKey(s.getPut())}">
+                          <span class="badge rounded-pill bg-secondary" th:text="${#dates.format(quotes.get(s.getPut()).getAskTime(), 'HH:mm - dd. MMM yyyy')}"></span>
+                        </td>
+                        <td th:if="${quotes.containsKey(s.getPut())}" th:text="${quotes.get(s.getPut()).getDeltaAsString()}"></td>
+                        <td th:if="${quotes.containsKey(s.getPut())}">
+                          <span class="badge rounded-pill bg-secondary" th:text="${#dates.format(quotes.get(s.getPut()).getDeltaTime(), 'HH:mm - dd. MMM yyyy')}"></span>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colspan="7" th:text="${quotes.get(e.getUnderlyingSymbol()).getBidPrice()}"></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <a class="btn btn-primary" href="#" th:href="@{/accounts}">Back</a>
+    </div>
+  </main>
+  <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

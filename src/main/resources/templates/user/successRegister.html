@@ -1,0 +1,16 @@
+<html>
+<head>
+<div th:replace="~{fragments/headerfiles :: header}"></div>
+<title th:utext="#{label.pages.home.title}">home</title>
+<meta http-equiv="refresh" th:content="|3; url=@{/}|" />
+</head>
+<body>
+  <div th:replace="~{fragments/header :: header}"></div>
+  <main role="main" class="container">
+    <h1 class="alert alert-success" th:utext="#{message.regSucc}">success</h1>
+    <p>You will be redirected to the login page automatically.</p>
+    <a th:href="@{/login}" th:utext="#{label.login}">login</a>
+  </main>
+  <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

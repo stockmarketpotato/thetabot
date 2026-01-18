@@ -1,0 +1,58 @@
+spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    password: ''
+    url: 'jdbc:h2:file:~/thetabot-test-h2-db;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE'
+    username: sa
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+        globally_quoted_identifiers_skip_column_definitions: true
+        
+  main:
+    banner-mode: off 
+  output:
+    ansi:
+      enabled: ALWAYS
+# The format used for the keystore. It could be set to JKS in case it is a JKS file
+server:
+  port: 443
+  ssl:
+    key-store-type: PKCS12
+    # The path to the keystore containing the certificate
+    key-store: src/main/resources/keystore/thetabot.p12
+    # The password used to generate the certificate
+    key-store-password: 
+    # The alias mapped to the certificate
+    key-alias: thetabot
+
+tastytrade:
+  api:
+    prod:
+      login: 
+      password:  
+    cert01:
+      name: 
+      login: 
+      password:  
+      account: 
+    cert02:
+      name: 
+      login: 
+      password:  
+      account: 
+    cert03:
+      name: 
+      login: 
+      password: 
+      account: 

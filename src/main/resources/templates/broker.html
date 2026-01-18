@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<div th:replace="~{fragments/headerfiles :: header}"></div>
+<title>ThetaBot - Broker and Account Management</title>
+<script type="text/javascript" th:src="@{/js/togglepw.js}"></script>
+</head>
+<body>
+  <div th:replace="~{fragments/header :: header}"></div>
+  <main role="main" class="container">
+    <h1>Broker and Account Management</h1>
+    <p>Provides access to a trading account and its positions.</p>
+    <div class="row">
+      <div class="col-lg-6">
+        <fieldset>
+          <legend class="float-none w-auto p-2">Settings</legend>
+          <table class="table table-sm table-borderless align-middle">
+            <tr>
+              <td>apiLogin</td>
+              <td th:text="${settings.apiLogin}" />
+            </tr>
+            <tr>
+              <td>apiPassword</td>
+              <td>
+                <div class="input-group mb-3">
+                  <input readonly class="form-control" type="password" name="apiPassword" id="apiPassword"
+                    autocomplete="off" th:value="${settings.apiPassword}" /> <span class="input-group-text"> <i
+                    class="bi bi-eye-slash" id="apiPasswordEye" style="cursor: pointer"
+                    onclick="showPasswordEye('apiPassword', 'apiPasswordEye')"></i>
+                  </span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>certApiLogin</td>
+              <td th:text="${settings.certApiLogin}" />
+            </tr>
+            <tr>
+              <td>certApiPassword</td>
+              <td>
+                <div class="input-group mb-3">
+                  <input readonly class="form-control" type="password" name="certApiPassword" id="certApiPassword"
+                    autocomplete="off" th:value="${settings.certApiPassword}" /> <span class="input-group-text">
+                    <i class="bi bi-eye-slash" id="certApiPasswordEye" style="cursor: pointer"
+                    onclick="showPasswordEye('certApiPassword', 'certApiPasswordEye')"></i>
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <a class="btn btn-primary" href="#" th:href="@{/broker/edit}"> Edit Broker Settings </a>
+        </fieldset>
+      </div>
+    </div>
+  </main>
+  <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

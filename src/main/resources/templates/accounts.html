@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<div th:replace="~{fragments/headerfiles :: header}"></div>
+<title>ThetaBot - Accounts and Positions</title>
+</head>
+
+<body>
+  <div th:replace="~{fragments/header :: header}"></div>
+  <main role="main" class="container">
+    <h2>Accounts</h2>
+    <p>Overview about open positions on each account including live updates.</p>
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div th:if="${ not#lists.isEmpty(accounts)}">
+          <h4>Tastytrade</h4>
+          <table class="table table-responsive">
+            <tr>
+              <th>Account Number</th>
+              <th>Account Type</th>
+              <th>Margin or Cash</th>
+              <th>Action</th>
+            </tr>
+            <tr th:each="account : ${accounts}">
+              <td th:text="${account.account_number}"></td>
+              <td th:text="${account.account_type_name}"></td>
+              <td th:text="${account.margin_or_cash}"></td>
+              <td>
+                <a class="btn btn-primary btn-sm" href="#" th:href="@{'/accounts/positions?no=' + ${account.account_number}}">Positions</a>
+                <a class="btn btn-primary btn-sm" href="#" th:href="@{'/accounts/orders?no=' + ${account.account_number}}">Orders</a>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+  <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+
+</html>

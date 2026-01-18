@@ -1,0 +1,212 @@
+<th:block th:fragment="usd">
+      <div class="row justify-content-center p-2">
+        <div class="col-sm">
+          
+          <div class="rounded p-1" id="containerUsd" style="height: 500px; min-width: 310px;"></div>
+          <script th:inline="javascript">
+          document.addEventListener('DOMContentLoaded',
+            (async () => {
+              var netLiqUsd = /*[[${netLiqUsd}]]*/ 'null';
+              var cashUsd = /*[[${cashUsd}]]*/ 'null';
+              // Create the chart
+              Highcharts.stockChart('containerUsd', {
+                chart: { backgroundColor: '#FFE7BD' },
+                credits: { enabled: false },
+                rangeSelector: {
+                  selected: 2,
+                  buttonTheme: {
+                    style: {
+                      backgroundColor: 'FFE7BD',// '#E5D8B4',
+                      color: '#7C5E86'
+                    }
+                  }
+                },
+                legend: {
+                  enabled: true,
+                  backgroundColor: '#FFE7BD',
+                  itemStyle: {
+                    color: '#5e4a3d',
+                    fontSize: '12px'
+                  },
+                  itemHoverStyle: {
+                    color: '#5e4a3d'
+                  }
+                },
+                title: {
+                  text: 'Net Liquidity in USD ($)',
+                  style: { color: '#7C5E86' }
+                },
+                xAxis: {
+                  overscroll: '10px',
+                  tickColor: '#0B0835',
+                  lineColor: '#0B0835'
+                },
+                yAxis: {
+                  gridLineColor: '#E5D8B4'
+                },
+                series: [{
+                    type: 'area',
+                    name: 'Cash',
+                    color: '#e3b23c',
+                    data: cashUsd.map(dp => [dp.x, dp.y]),
+                    currency: 'USD',
+                    locale: 'en-US',
+                    shadow: false,
+                    tooltip: {
+                      valueDecimals: 2
+                    },
+                    lastPrice: {
+                        enabled: true,
+                        color: 'transparent',
+                        label: {
+                          enabled: true,
+                          backgroundColor: '#ffffff',
+                          borderColor: '#EDC42F',
+                          borderWidth: 1,
+                          style: {
+                            color: '#7C5E86',
+                          }
+                        }
+                      }
+                  },
+                  {
+                    name: 'Net Liquidity',
+                    color: '#2BA093',
+                    data: netLiqUsd.map(dp => [dp.x, dp.y]),
+                    currency: 'USD',
+                    locale: 'en-US',
+                    shadow: true,
+                    lineWidth: 1,
+                    crisp: true,
+                    tooltip: {
+                      valueDecimals: 2
+                    },
+                    lastPrice: {
+                      enabled: true,
+                      color: 'transparent',
+                      label: {
+                        enabled: true,
+                        backgroundColor: '#ffffff',
+                        borderColor: '#2BA093',
+                        borderWidth: 1,
+                        style: {
+                          color: '#7C5E86'
+                        }
+                      }
+                    }
+                  }
+
+                ]
+              });
+            })());
+          </script>
+        </div>
+      </div>
+</th:block>
+
+<th:block th:fragment="eur">
+      <div class="row justify-content-center p-2">
+        <div class="col-sm">
+          <div class="rounded p-1" id="containerEur" style="height: 500px; min-width: 310px;"></div>
+          <script th:inline="javascript">
+          document.addEventListener('DOMContentLoaded',
+            (async () => {
+              var netLiqEur = /*[[${netLiqEur}]]*/ 'null';
+              var cashEur = /*[[${cashEur}]]*/ 'null';
+
+              // Create the chart
+              Highcharts.stockChart('containerEur', {
+                  chart: { backgroundColor: '#FFE7BD' },
+                  credits: { enabled: false },
+                  rangeSelector: {
+                    selected: 1,
+                    buttonTheme: {
+                      style: {
+                        backgroundColor: 'FFE7BD',// '#E5D8B4',
+                        color: '#7C5E86'
+                      }
+                    }
+                  },
+                  legend: {
+                    enabled: true,
+                    backgroundColor: '#FFE7BD',
+                    itemStyle: {
+                      color: '#5e4a3d',
+                      fontSize: '12px'
+                    },
+                    itemHoverStyle: {
+                      color: '#5e4a3d'
+                    }
+                  },
+                  title: {
+                    text: 'Net Liquidity in EUR (€)',
+                    style: { color: '#7C5E86' }
+                  },
+                  xAxis: {
+                    overscroll: '10px',
+                    tickColor: '#0B0835',
+                    lineColor: '#0B0835'
+                  },
+                  yAxis: {
+                    gridLineColor: '#E5D8B4'
+                  },
+                series: [{
+                    name: 'Cash Balance',
+                    type: 'area',
+                    color: '#EDC42F',
+                    data: cashEur.map(dp => [dp.x, dp.y]),
+                    currency: 'EUR',
+                    locale: 'de-DE',
+                    tooltip: {
+                      valueDecimals: 2
+                    },
+                    lastPrice: {
+                      enabled: true,
+                      color: 'transparent',
+                      label: {
+                        enabled: true,
+                        backgroundColor: '#ffffff',
+                        borderColor: '#EDC42F',
+                        borderWidth: 1,
+                        style: {
+                          color: '#7C5E86',
+                        }
+                      }
+                    }
+                  },
+                 
+                  {
+                    name: 'Net Liquidity',
+                    data: netLiqEur.map(dp => [dp.x, dp.y]),
+                    color: '#2BA093',
+                    currency: 'EUR',
+                    locale: 'de-DE',
+                    shadow: true,
+                    lineWidth: 1,
+                    crisp: true,
+                    tooltip: {
+                      valueDecimals: 2
+                    },
+                    lastPrice: {
+                      enabled: true,
+                      color: 'transparent',
+                      label: {
+                        enabled: true,
+                        backgroundColor: '#ffffff',
+                        borderColor: '#2BA093',
+                        borderWidth: 1,
+                        style: {
+                          color: '#7C5E86'
+                        }
+                      }
+                    }
+                  }
+
+
+                ]
+              });
+            })());
+          </script>
+        </div>
+      </div>
+</th:block>

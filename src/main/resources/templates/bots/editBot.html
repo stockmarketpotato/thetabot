@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<div th:replace="~{fragments/headerfiles :: header}"></div>
+<title>ThetaBot - Edit Bot Configuration</title>
+</head>
+<body>
+  <div th:replace="~{fragments/header :: header}"></div>
+  <main role="main" class="container">
+    <h1>Edit Bot Configuration</h1>
+    <form action="#" class="form" th:action="@{/bots/saveBot}" th:object="${form}" method="post">
+      <div class="row">
+        <div class="col-sm-5">
+          <input th:field="${form.id}" hidden />
+          <div class="mx-4 mt-4">
+            <input type="text" class="form-control shadow rounded" th:field="${form.name}" required />
+          </div>
+        </div>
+        <div class="col-sm-5">
+          <div class="me-4 mt-4">
+            <input type="submit" id="submitButton" class="btn btn-success shadow rounded" th:value="Save"> <a
+              class="btn btn-info shadow rounded" href="#" th:href="@{/}">Cancel</a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-5">
+          <div class="card m-4">
+            <div class="card-body shadow rounded">
+              <h5 class="card-title">Entry Options</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+              <table class="table table-sm table-borderless align-middle">
+                <tr>
+                  <td>Account <span class="bi bi-info-circle fs-6 text-secondary" data-toggle="tooltip"
+                    title="Select a margin account to trade this bot." style="cursor: pointer;"></span>
+                  </td>
+                  <td><select id="accountNumber" name="account" th:field="${form.accountNumber}">
+                      <option th:each="acc : ${accounts}" th:value="${acc.account_number}"
+                        th:text="${acc.account_number}" />
+                  </select></td>
+                </tr>
+                <tr>
+                  <td>Underlying <span class="bi bi-info-circle fs-6 text-secondary" data-toggle="tooltip"
+                    title="Underlying product for which we sell options." style="cursor: pointer;"></span>
+                  </td>
+                  <td><select name="underlying" th:field="${form.underlying}">
+                      <option th:each="opt : ${T(com.stockmarketpotato.bot.BotConfiguration.Underlying).values()}" th:value="${opt}"
+                        th:text="${opt.displayValue}"></option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td>Credit per entry <span class="bi bi-info-circle fs-6 text-secondary" data-toggle="tooltip"
+                    title="Amount of credit to collect per entry in a position." style="cursor: pointer;"></span>
+                  </td>
+                  <td>
+                    <div class="input-group mb-3">
+                      <span class="input-group-text">$</span> <input type="number" step="10" id="creditPerEntry"
+                        style="max-width: 100px;" th:field="${form.creditPerEntry}" class="form-control" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Maximum Delta <span class="bi bi-info-circle fs-6 text-secondary" data-toggle="tooltip"
+                    title="Maximum allowed option delta of the short put." style="cursor: pointer;"></span>
+                  </td>
+                  <td><input step="0.01" type="number" id="typeNumber" class="form-control" max="1.00" min="0.00"
+                    th:placeholder="maxDelta" th:field="${form.maxDelta}" required style="max-width: 100px;" /></td>
+                </tr>
+                <tr>
+                  <td>Minimum DTE <span class="bi bi-info-circle fs-6 text-secondary" data-toggle="tooltip"
+                    title="Sell closest to openDte DTE and go further out." style="cursor: pointer;"></span>
+                  </td>
+                  <td><input step="1" type="number" id="openDte" class="form-control" min="0"
+                    th:placeholder="openDte" th:field="${form.openDte}" required style="max-width: 100px;" /></td>
+                </tr>
+                <tr>
+                  <td>Buying Power Usage <span class="bi bi-info-circle fs-6 text-secondary" data-toggle="tooltip"
+                    title="The maximum buying power that will be used. Value between 0 and 1 represents 0 to 100% allocation."
+                    style="cursor: pointer;"></span>
+                  </td>
+                  <td><input step="0.05" type="number" id="maxBuyingPower" class="form-control" max="1.00"
+                    min="0.00" th:placeholder="maxBuyingPower" th:field="${form.maxBuyingPower}" required
+                    style="max-width: 100px;" /></td>
+                </tr>
+                <tr>
+                  <td>Bomb Shelter</td>
+                  <td>
+                    <div class="form-check form-switch">
+                      <input readonly class="form-check-input" role="switch" type="checkbox" id="bombShelter"
+                        th:field="${form.bombShelter}">
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="card m-4">
+            <div class="card-body shadow rounded">
+              <h5 class="card-title">Exit Options</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+              <table class="table table-sm table-borderless align-middle">
+                <tr>
+                  <td>Profit Taking <span class="bi bi-info-circle fs-6 text-secondary" data-toggle="tooltip"
+                    title="When to take profit of open positions. Triggered automatically by limit order."
+                    style="cursor: pointer;"></span></td>
+                  <td>
+                    <select class="form-control" id="takeProfit" th:field="${form.takeProfit}">
+                      <option th:each="option : ${takeProfitOptions}" th:value="${option.key}" th:text="${option.value}"></option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Stop Loss <span class="bi bi-info-circle fs-6 text-secondary" data-toggle="tooltip"
+                    title="Negative limit for the Stop Loss. Triggered automatically by an alter."
+                    style="cursor: pointer;"></span></td>
+                    
+                  <td>
+                    <select class="form-control" id="takeProfit" th:field="${form.stopLoss}">
+                      <option th:each="option : ${stopLossOptions}" th:value="${option.key}" th:text="${option.value}"></option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Before Expiration</td>
+                  <td><select class="form-control" id="exitDte" th:field="${form.exitDte}">
+                      <option value="1">1 day before</option>
+                      <option value="2">2 days before</option>
+                      <option value="3">3 days before</option>
+                      <option value="4">4 days before</option>
+                      <option value="5">5 days before</option>
+                      <option value="6">6 days before</option>
+                      <option value="7">7 days before</option>
+                      <option value="8">8 days before</option>
+                      <option value="9">9 days before</option>
+                      <option value="10">10 days before</option>
+                      <option value="11">11 days before</option>
+                      <option value="12">12 days before</option>
+                      <option value="13">13 days before</option>
+                      <option value="14">14 days before</option>
+                      <option value="15">15 days before</option>
+                      <option value="16">16 days before</option>
+                      <option value="17">17 days before</option>
+                      <option value="18">18 days before</option>
+                      <option value="19">19 days before</option>
+                      <option value="20">20 days before</option>
+                      <option value="21">21 days before</option>
+                      <option value="22">22 days before</option>
+                      <option value="23">23 days before</option>
+                      <option value="24">24 days before</option>
+                      <option value="25">25 days before</option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td>Market Time <span class="bi bi-info-circle fs-6 text-secondary" data-toggle="tooltip"
+                    title="Market Time when open positions are closed before expiration. Select a time between 3:00 p.m. and 3:59 p.m. Eastern Time."
+                    style="cursor: pointer;"></span></td>
+                  <td>
+                    <div class="row align-items-center">
+                      <div class="col-sm-5">
+                        <input class="form-control" style="max-width: 80px;" type="time" min="15:00" max="15:59"
+                          th:field="${form.marketTimeClosePosition}" id="offset20">
+                      </div>
+                      <div class="col">
+                        <small class="w-100 fst-italic fw-lighter text-secondary">from 3:00 p.m. to 3:59 p.m.</small>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Close Positions</td>
+                  <td>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" role="switch" type="checkbox" id="closePositions"
+                        th:field="${form.closePositions}">
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-5">
+          <div class="card m-4">
+            <div class="card-body shadow rounded">
+              <h5 class="card-title">Schedule</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+              <table class="table table-sm table-borderless align-middle">
+                <!-- 
+                <tr>
+                  <td><span style="text-transform: uppercase">Start</span></td>
+                  <td></td>
+                </tr>
+ -->
+                <tr>
+                  <td>Repeat On... <span class="bi bi-info-circle fs-6 text-secondary" data-toggle="tooltip"
+                    title="Days of the week when new positions are opened." style="cursor: pointer;"></span>
+                  </td>
+                  <td><select class="selectpicker" multiple onchange="updateEntriesPerWeek()" size="5"
+                    id="tradingDays" oninput="updateEntriesPerWeek()" name="tradingDays" th:field="${form.tradingDays}">
+                      <option th:each="opt : ${T(com.stockmarketpotato.bot.BotConfiguration.TradingDay).values()}" th:value="${opt}"
+                        th:text="${opt.displayValue}" th:label="${opt.displayValue.substring(0, 3)}"></option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>
+                    <div class="row align-items-center">
+                      <div class="col">
+                        <small class="fst-italic fw-lighter text-secondary">Entries/Week <span
+                          class="bi bi-info-circle fs-6 text-secondary" data-toggle="tooltip"
+                          title="Position entries per week derived from trading days." style="cursor: pointer;"></span>
+                        </small>
+                      </div>
+                      <div class="col">
+                        <small class="fst-italic fw-lighter text-secondary"> <input type="text"
+                          id="entriesPerWeek" readonly class="form-control-plaintext" th:field="${form.entriesPerWeek}">
+                        </small>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Market Time (EST) <span class="bi bi-info-circle fs-6 text-secondary" data-toggle="tooltip"
+                    title="New positions are opened before market closes. This field defines the offset before market close. Trading hours for NYSE are Monday through Friday 9:30 a.m. to 4:00 p.m. Eastern time."
+                    style="cursor: pointer;"></span></td>
+                  <td>
+                    <div class="row align-items-center">
+                      <div class="col-sm-5">
+                        <input class="form-control" type="time" th:field="${form.marketTimeOpenPosition}"
+                          style="max-width: 80px;" id="marketTimeOpenPosition"
+                          min="15:00" max="16:59">
+                      </div>
+                      <div class="col">
+                        <small class="w-100 fst-italic fw-lighter text-secondary">from 3:00 p.m. and 3:59 p.m.</small>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <!-- 
+                <tr>
+                  <td><span style="text-transform: uppercase">End</span></td>
+                  <td></td>
+                </tr>
+-->
+                <tr>
+                  <td>Market Holidays</td>
+                  <td><span class="fst-italic">skip</span></td>
+                </tr>
+                <tr>
+                  <td>Open Positions</td>
+                  <td>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" role="switch" type="checkbox" id="openPositions"
+                        th:field="${form.openPositions}">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Manual Trading Instructions <span class="bi bi-info-circle fs-6 text-secondary"
+                    data-toggle="tooltip"
+                    title="Bot sends trading instructions for STO and BTC according to strategy via email"
+                    style="cursor: pointer;"></span>
+                  </td>
+                  <td>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" role="switch" type="checkbox" id="manualTradingActive"
+                        th:field="${form.manualTradingActive}">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Schedule Enabled<span class="bi bi-info-circle fs-6 text-secondary" data-toggle="tooltip"
+                    title="Disable to temporarily suspend executon of schedule." style="cursor: pointer;"></span>
+                  </td>
+                  <td>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" role="switch" type="checkbox" id="scheduleEnabled"
+                        th:field="${form.scheduleEnabled}">
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="card m-4">
+            <div class="card-body shadow rounded">
+              <h5 class="card-title">Monitoring</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+              <table class="table table-sm table-borderless">
+                <tr>
+                  <td>Pre-Market <span class="bi bi-info-circle fs-6 text-secondary" data-toggle="tooltip"
+                    title="Bot monitors all positions in the selected account and sends report before market opens."
+                    style="cursor: pointer;"></span>
+                  </td>
+                  <td>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" role="switch" type="checkbox" id="monitoringPremarket"
+                        th:field="${form.monitoringPremarket}">
+                    </div>
+                  </td>
+                  <td>
+                    <div class="row align-items-center">
+                      <div class="col-sm-5">
+                        <input class="form-control" style="max-width: 80px;" type="time"
+                          id="marketTimeMonitoringPreMarket" th:field="${form.marketTimeMonitoringPreMarket}"
+                          min="09:00" max="09:29">
+                      </div>
+                      <div class="col">
+                        <small class="w-100 fst-italic fw-lighter text-secondary">from 9:00 p.m. to 9:29 p.m.</small>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>After Open <span class="bi bi-info-circle fs-6 text-secondary" data-toggle="tooltip"
+                    title="The offset in hours minutes after market opens, at which monitoring is scheduled."
+                    style="cursor: pointer;"></span>
+                  </td>
+                  <td>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" role="switch" type="checkbox" id="monitoringAfterOpen"
+                        th:field="${form.monitoringAfterOpen}">
+                    </div>
+                  </td>
+                  <td>
+                    <div class="row align-items-center">
+                      <div class="col-sm-5">
+                        <input class="form-control" style="max-width: 80px;" type="time"
+                          th:field="${form.marketTimeMonitoringAfterOpen}" id="marketTimeMonitoringAfterOpen"
+                          min="09:30" max="10:30">
+                      </div>
+                      <div class="col">
+                        <small class="w-100 fst-italic fw-lighter text-secondary">from 9:30 p.m. to 10:30 p.m.</small>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Before Close</td>
+                  <td>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" role="switch" type="checkbox" id="monitoringBeforeClose"
+                        th:field="${form.monitoringBeforeClose}">
+                    </div>
+                  </td>
+                  <td>
+                    <div class="row align-items-center">
+                      <div class="col-sm-5">
+                        <input class="form-control" style="max-width: 80px;" type="time"
+                          id="marketTimeMonitoringBeforeClose" th:field="${form.marketTimeMonitoringBeforeClose}"
+                          min="15:00" max="16:00">
+                      </div>
+                      <div class="col">
+                        <small class="w-100 fst-italic fw-lighter text-secondary">from 3:00 p.m. to 4:00 p.m.</small>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </main>
+  <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+<script>
+	function updateEntriesPerWeek() {
+		var numTradingDays = document.getElementById("tradingDays").selectedOptions.length;
+		document.getElementById("entriesPerWeek").value = numTradingDays;
+	}
+	updateEntriesPerWeek();
+	
+	function toTime(time) {
+	    const [ h, m ] = time.split(":");
+	    const ms = new Date().setHours(h, m, 0);
+	    return new Date(ms);
+	}
+
+	function offsetTime(offsetId, descriptionId, reference) {
+		var offset = toTime(document.getElementById(offsetId).value);
+		var d = new Date(reference.getTime() - offset.getTime());
+		document.getElementById(descriptionId).innerText = d.getHours() + ":" + d.getMinutes() + " ET";
+	}
+	
+	function afterTime(offsetId, descriptionId, reference) {
+		var offset = toTime(document.getElementById(offsetId).value);
+		var d = new Date(reference.getTime() + offset.getTime());
+		document.getElementById(descriptionId).innerText = d.getHours() + ":" + d.getMinutes() + " ET";
+	}
+	
+	function setCloseOffTime(offsetId, descriptionId) {
+		console.log(offsetId);
+		console.log(descriptionId);
+		offsetTime(offsetId, descriptionId, toTime("16:00"));
+	}
+	
+	function setOpenOffsetTime(offsetId, descriptionId) {
+		console.log(offsetId);
+		console.log(descriptionId);
+		offsetTime(offsetId, descriptionId, toTime("09:30"));
+	}
+	
+	function setOpenAfterTime(offsetId, descriptionId) {
+		console.log(offsetId);
+		console.log(descriptionId);
+		afterTime(offsetId, descriptionId, toTime("09:30"));
+	}
+			
+</script>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<style type="text/css">
+body { font-family: Tahoma, sans-serif; font-size: small; }
+table td { border: 1px solid black; padding: 0.5em; }
+table td:nth-child(2) { text-align: end; }
+</style>
+<body>
+  <div th:if="not ${orders.isEmpty()}" th:each="o : ${orders}">
+    <h2>Proposed Orders</h2>
+    <h3 th:text="${o.key}"></h3>
+    <table>
+      <tr>
+        <td>Type</td>
+        <td th:text="@{${o.value.getOrderType()} + ' @ ' + ${o.value.getPrice()}}"></td>
+      </tr>
+      <tr>
+        <td>Time-In-Force</td>
+        <td th:text="${o.value.getTimeInForce()}"></td>
+      </tr>
+      <tr>
+        <td>Est. Trade Cost</td>
+        <td>
+        <span th:text="@{${o.value.getLegs().get(0).getQuantity()} + ' x ' + ${o.value.getPrice()} + ' x 50 = ' + ${tradeCost.get(o.key)}}"></span>
+        <span th:if="${o.value.getPriceEffect().toString() == 'Credit'}" style="color:green"> Credit</span>
+        <span th:if="${o.value.getPriceEffect().toString() == 'Debit'}" style="color:red"> Debit</span>
+        </td>
+      </tr>
+      <tr>
+        <td>Symbol</td>
+        <td th:text="${o.value.getLegs().get(0).getSymbol()}"></td>
+      </tr>
+      <tr>
+        <td>Action</td>
+        <td th:text="${o.value.getLegs().get(0).getAction()}"></td>
+      </tr>
+      <tr>
+        <td>Delta</td>
+        <td th:text="${delta.get(o.key)}"></td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>

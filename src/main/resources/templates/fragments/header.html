@@ -1,0 +1,31 @@
+<header th:fragment="header">
+  <style>
+  body {
+    background-color: #FFE7BD; /* Retro beige */
+  }
+  </style>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" th:href="@{/}">ThetaBot</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li sec:authorize="isAuthenticated()" class="nav-item"><a class="nav-link" th:href="@{/accounts}">Accounts</a></li>
+          <li sec:authorize="isAuthenticated()" class="nav-item"><a class="nav-link" th:href="@{/broker}">Broker</a></li>
+          <li sec:authorize="isAuthenticated()" class="nav-item"><a class="nav-link" th:href="@{/configuration}">Settings</a></li>
+          <li sec:authorize="isAuthenticated()" class="nav-item"><a class="nav-link" th:href="@{/feeds}">Feeds</a></li>
+        </ul>
+        <form sec:authorize="isAnonymous()" class="d-flex" th:action="@{/login}">
+          <button type="submit" class="btn btn-info">Login</button>
+        </form>
+        <form sec:authorize="isAuthenticated()" class="d-flex" th:action="@{/logout}" method=post>
+          <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+          <button type="submit" class="btn btn-secondary">Logout</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+</header>

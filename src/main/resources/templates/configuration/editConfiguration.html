@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<div th:replace="~{fragments/headerfiles :: header}"></div>
+<title>ThetaBot - Edit Configuration</title>
+<script type="text/javascript" th:src="@{/js/togglepw.js}"></script>
+</head>
+<body>
+  <div th:replace="~{fragments/header :: header}"></div>
+  <main role="main" class="container">
+    <h1>Edit Settings</h1>
+    <div class="row">
+      <div class="col-lg-6">
+        <form action="#" class="form-horizontal" th:action="@{/configuration/save}" th:object="${settings}"
+          method="post">
+          <input hidden th:field="${settings.id}" />
+          <fieldset>
+            <legend class="float-none w-auto p-2">Settings</legend>
+            <table class="table table-sm table-borderless align-middle">
+              <tr>
+                <td><p class="align-middle font-monospace">mail_smtp_ssl_enable</p></td>
+                <td><select id="mailSmtpSslEnable" name="mailSmtpSslEnable"
+                  th:field="${settings.mailSmtpSslEnable}">
+                    <option value="true">true</option>
+                    <option value="false">false</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td><p class="align-middle font-monospace">mail_host</p></td>
+                <td><input type="text" id="mailHost" class="form-control" th:field="${settings.mailHost}" required /></td>
+              </tr>
+              <tr>
+                <td><p class="align-middle font-monospace">mail_smtp_port</p></td>
+                <td><input type="text" id="mailSmtpPort" class="form-control" th:field="${settings.mailSmtpPort}"
+                  required /></td>
+              </tr>
+              <tr>
+                <td><p class="align-middle font-monospace">mail_transport_protocol</p></td>
+                <td><input type="text" id="mailTransportProtocol" class="form-control"
+                  th:field="${settings.mailTransportProtocol}" required /></td>
+              </tr>
+              <tr>
+                <td><p class="align-middle font-monospace">mail_smtp_auth</p></td>
+                <td><select id="mailSmtpAuth" name="mailSmtpAuth" th:field="${settings.mailSmtpAuth}">
+                    <option value="true">true</option>
+                    <option value="false">false</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td><p class="align-middle font-monospace">mail_username</p></td>
+                <td><input type="text" id="mailUsername" class="form-control" th:field="${settings.mailUsername}"
+                  required /></td>
+              </tr>
+              <tr>
+                <td><p class="align-middle font-monospace">mail_password</p></td>
+                <td>
+                  <div class="input-group mb-3">
+                    <input class="form-control" type="password" name="mailPassword" id="mailPassword" autocomplete="off"
+                      th:value="${settings.mailPassword}" /> <span class="input-group-text"> <i
+                      class="bi bi-eye-slash" id="mailPasswordEye" style="cursor: pointer"
+                      onclick="showPasswordEye('mailPassword', 'mailPasswordEye')"></i>
+                    </span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Emails Enabled</td>
+                <td>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" role="switch" type="checkbox" id="mailEnabled"
+                      th:field="${settings.mailEnabled}" />
+                  </div>
+                </td>
+              </tr>
+            </table>
+            <a class="btn btn-info" href="#" th:href="@{/configuration}">Cancel</a> <input type="submit"
+              id="submitButton" class="btn btn-success" th:value="Save">
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </main>
+  <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

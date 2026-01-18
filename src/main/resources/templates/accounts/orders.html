@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<div th:replace="~{fragments/headerfiles :: header}"></div>
+<title>ThetaBot - Accounts and Positions</title>
+</head>
+<body>
+  <div th:replace="~{fragments/header :: header}"></div>
+  <main role="main" class="container">
+    <div class="row justify-content-center">
+      <div class="col-xl-12" th:if="not ${liveOrders.isEmpty()}">
+        <h2>
+          Live Orders in <span th:text="${accountNumber}"></span>
+        </h2>
+        <table class="table table-sm">
+          <tr>
+            <th>id</th>
+            <th>time-in-force</th>
+            <th>order-type</th>
+            <th>size</th>
+            <th>underlying-symbol</th>
+            <th>underlying-instrument-type</th>
+            <th>price</th>
+            <th>price-effect</th>
+            <th>status</th>
+            <th>instrument-type</th>
+            <th>symbol</th>
+            <th>quantity</th>
+            <th>remaining-quantity</th>
+            <th>action</th>
+          </tr>
+          <tr th:each="o : ${liveOrders}">
+            <td th:text="${o.getId()}"></td>
+            <td th:text="${o.getTimeInForce()}"></td>
+            <td th:text="${o.getOrderType()}"></td>
+            <td th:text="${o.getSize()}"></td>
+            <td th:text="${o.getUnderlyingSymbol()}"></td>
+            <td th:text="${o.getUnderlyingInstrumentType()}"></td>
+            <td th:text="${o.getPrice()}"></td>
+            <td th:text="${o.getPriceEffect()}"></td>
+            <td th:text="${o.getStatus()}"></td>
+            <td th:text="${o.getLegs().get(0).getInstrumentType()}"></td>
+            <td th:text="${o.getLegs().get(0).getSymbol()}"></td>
+            <td th:text="${o.getLegs().get(0).getQuantity()}"></td>
+            <td th:text="${o.getLegs().get(0).getRemainingQuantity()}"></td>
+            <td th:text="${o.getLegs().get(0).getAction()}"></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-xl-12" th:if="not ${orders.isEmpty()}">
+        <h2>
+          All Orders in <span th:text="${accountNumber}"></span>
+        </h2>
+        <table class="table table-sm">
+          <tr>
+            <th>id</th>
+            <th>time-in-force</th>
+            <th>order-type</th>
+            <th>size</th>
+            <th>underlying-symbol</th>
+            <th>underlying-instrument-type</th>
+            <th>price</th>
+            <th>price-effect</th>
+            <th>status</th>
+            <th>instrument-type</th>
+            <th>symbol</th>
+            <th>quantity</th>
+            <th>remaining-quantity</th>
+            <th>action</th>
+          </tr>
+          <tr th:each="o : ${orders}">
+            <td th:text="${o.getId()}"></td>
+            <td th:text="${o.getTimeInForce()}"></td>
+            <td th:text="${o.getOrderType()}"></td>
+            <td th:text="${o.getSize()}"></td>
+            <td th:text="${o.getUnderlyingSymbol()}"></td>
+            <td th:text="${o.getUnderlyingInstrumentType()}"></td>
+            <td th:text="${o.getPrice()}"></td>
+            <td th:text="${o.getPriceEffect()}"></td>
+            <td th:text="${o.getStatus()}"></td>
+            <td th:text="${o.getLegs().get(0).getInstrumentType()}"></td>
+            <td th:text="${o.getLegs().get(0).getSymbol()}"></td>
+            <td th:text="${o.getLegs().get(0).getQuantity()}"></td>
+            <td th:text="${o.getLegs().get(0).getRemainingQuantity()}"></td>
+            <td th:text="${o.getLegs().get(0).getAction()}"></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <a class="btn btn-primary" href="#" th:href="@{/accounts}">Back</a>
+    </div>
+  </main>
+  <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

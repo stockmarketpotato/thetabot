@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<div th:replace="~{fragments/headerfiles :: header}"></div>
+<title>ThetaBot - Configuration</title>
+</head>
+<body>
+  <div th:replace="~{fragments/header :: header}"></div>
+  <main role="main" class="container">
+    <h1>Configuration</h1>
+    <p>Configure accounts and strategy parameters.</p>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="m-4">
+          <a class="btn btn-light btn-sm" th:href="@{/configuration/clearNetLiqHistory}" onclick="return confirm('Are you sure you want to delete the NetLiqHistory?')"><i class="bi bi-trash3"> Delete Net Liquidity History</i></a>
+        </div>
+        <fieldset>
+          <legend class="float-none w-auto p-2">Settings</legend>
+          <table class="table table-sm table-borderless align-middle">
+            <thead>
+              <tr>
+                <th scope="col">Setting</th>
+                <th scope="col">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><p class="align-middle font-monospace">mail_smtp_ssl_enable</p></td>
+                <td th:text="${settings.mailSmtpSslEnable}" />
+              </tr>
+              <tr>
+                <td><p class="align-middle font-monospace">mail_host</p></td>
+                <td th:text="${settings.mailHost}" />
+              </tr>
+              <tr>
+                <td><p class="align-middle font-monospace">mail_smtp_port</p></td>
+                <td th:text="${settings.mailSmtpPort}" />
+              </tr>
+              <tr>
+                <td><p class="align-middle font-monospace">mail_transport_protocol</p></td>
+                <td th:text="${settings.mailTransportProtocol}" />
+              </tr>
+              <tr>
+                <td><p class="align-middle font-monospace">mail_smtp_auth</p></td>
+                <td th:text="${settings.mailSmtpAuth}" />
+              </tr>
+              <tr>
+                <td><p class="align-middle font-monospace">mail_username</p></td>
+                <td th:text="${settings.mailUsername}" />
+              </tr>
+              <tr>
+                <td><p class="align-middle font-monospace">mail_password</p></td>
+                <td>
+                  <div class="input-group mb-3">
+                    <input readonly class="form-control" type="password" name="mailPassword" id="mailPassword" autocomplete="off"
+                      th:value="${settings.mailPassword}" /> <span class="input-group-text"> <i
+                      class="bi bi-eye-slash" id="mailPasswordEye" style="cursor: pointer"
+                      onclick="showPasswordEye('mailPassword', 'mailPasswordEye')"></i>
+                    </span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Emails Enabled</td>
+                <td>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckCheckedDisabled"
+                      th:checked="${settings.mailEnabled}" disabled>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <a class="btn btn-primary" href="#" th:href="@{/configuration/edit}">Edit Settings</a>
+        </fieldset>
+      </div>
+    </div>
+  </main>
+  <script type="text/javascript" th:src="@{/js/togglepw.js}"></script>
+  <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

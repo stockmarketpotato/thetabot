@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<div th:replace="~{fragments/headerfiles :: header}"></div>
+<title>ThetaBot - Accounts and Positions</title>
+</head>
+<body>
+  <div th:replace="~{fragments/header :: header}"></div>
+  <main role="main" class="container">
+    <div class="row justify-content-center">
+      <div class="col">
+        <div class="card m-4">
+          <div class="card-body shadow rounded">
+            <h5 class="card-title">Performance</h5>
+            <table class="table table-sm" >
+              <tr>
+                <th>Total P/L</th>
+                <th>Total P/L (unreal.)</th>
+                <th>Premium Capture</th>
+              </tr>
+              <tr>
+                <td th:text="${performance.totalpnl}"></td>
+                <td class="font-italic" th:text="${performance.totalpnl_prel}"></td>
+                <td th:text="${performance.pcr}"></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card m-4">
+          <div class="card-body shadow rounded">
+            <h5 class="card-title">Trade Metrics</h5>
+            <table class="table table-sm" >
+              <tr>
+                <th>Win Count</th>
+                <th>Win Rate</th>
+                <th>Avg. Win</th>
+                <th>Total Credit</th>
+                <th>Avg. DIT</th>
+              </tr>
+              <tr>
+                <td th:text="${metrics.wincount}">Win Count</td>
+                <td th:text="${metrics.winrate}">Win Rate</td>
+                <td th:text="${metrics.avgwin}">Avg. Win</td>
+                <td th:text="${metrics.totalcredit}">Total Credit</td>
+                <td th:text="${metrics.avgdit}">Avg. DIT</td>
+              </tr>
+            </table>
+            <table class="table table-sm" >
+              <tr>
+                <th>theo. PCR</th>
+                <th>Occurences</th>
+                <th>Lost Rate</th>
+                <th>Avg. Loss</th>
+                <th>Avg. Credit</th>
+                <th>P/L per Cx</th>
+              </tr>
+              <tr>
+                <td th:text="${metrics.theopcr}">theo. PCR</td>
+                <td th:text="${metrics.occurences}">Occurences</td>
+                <td th:text="${metrics.lostrate}">Lost Rate</td>
+                <td th:text="${metrics.avgloss}">Avg. Loss</td>
+                <td th:text="${metrics.avgcredit}">Avg. Credit</td>
+                <td th:text="${metrics.plpercx}">P/L per Cx</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-xl-12" th:if="not ${trades.isEmpty()}">
+        <div class="card m-4">
+          <div class="card-body shadow rounded">
+            <h5 class="card-title">Trades</h5>
+            <table class="table table-sm" >
+              <tr>
+                <th>Strike</th>
+                <th>Trade Date</th>
+                <th>Exp Date</th>
+                <th>Close Date</th>
+                <th>Credit</th>
+                <th>Total Credit</th>
+                <th>Cost to close</th>
+                <th>Trade P/L</th>
+                <th>DTE</th>
+                <th>DIT</th>
+                <th>P/L per Day</th>
+                <th>∑ P/L</th>
+                <th>P/L Multiple</th>
+                <th>Commission</th>
+              </tr>
+              <tr th:each="t : ${trades}">
+                <td th:text="${t.getStrike()}"></td>
+                <td th:text="${#temporals.format(t.getTradeDate(), 'dd. MMM yyyy')}"></td>
+                <td th:text="${#temporals.format(t.getExpDate(), 'dd. MMM yyyy')}"></td>
+                <td th:text="${#temporals.format(t.getCloseDate(), 'dd. MMM yyyy')}"></td>
+                <td th:text="${t.getCredit()}"></td>
+                <td th:text="${t.getTotalCredit()}"></td>
+                <td th:text="${t.getCostToClose()}"></td>
+                <td th:text="${t.getTradePl()}"></td>
+                <td th:text="${t.getDte()}"></td>
+                <td th:text="${t.getDit()}"></td>
+                <td th:text="${t.getPlPerDay()}"></td>
+                <td th:text="${t.getSumPl()}"></td>
+                <td th:text="${t.getPlMultiple()}"></td>
+                <td th:text="${t.getCommission()}"></td>
+              </tr>
+            </table>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-xl-12" th:if="not ${transactions.isEmpty()}">
+        <div class="card m-4">
+          <div class="card-body shadow rounded">
+            <h5 class="card-title">Transactions</h5>
+            <table class="table table-sm">
+              <tr>
+                <th>description</th>
+                <th>transactionDate</th>
+                <th>netValue</th>
+              </tr>
+              <tr th:each="t : ${transactions}">
+                <td th:text="${t.getDescription()}"></td>
+                <td th:text="${t.getTransactionDate()}"></td>
+                <td th:text="${t.getNetValue()}"></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

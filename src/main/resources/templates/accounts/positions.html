@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<div th:replace="~{fragments/headerfiles :: header}"></div>
+<title>ThetaBot - Accounts and Positions</title>
+</head>
+<body>
+  <div th:replace="~{fragments/header :: header}"></div>
+  <main role="main" class="container">
+    <div class="row justify-content-center">
+      <div class="col-xl-12" th:if="${ not#lists.isEmpty(positions)}">
+        <h2>
+          Positions in <span th:text="${accountNumber}"></span>
+        </h2>
+        <table class="table table-sm">
+          <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Multiplier</th>
+            <th>Instrument Type</th>
+            <th>DTE</th>
+            <th>Open Price</th>
+            <th>PNL</th>
+            <th>Expiration</th>
+            <th>Ask</th>
+            <th>Bid</th>
+            <th></th>
+          </tr>
+          <tr th:each="account_pos : ${positions}">
+            <td data-toggle="tooltip" data-placement="right" th:title="${account_pos.symbol}"
+              th:text="${account_pos.getName()}"></td>
+            <td th:text="${account_pos.quantity}"></td>
+            <td th:text="${account_pos.multiplier}"></td>
+            <td th:text="${account_pos.instrument_type}"></td>
+            <td th:text="${account_pos.getDteAsString()}"></td>
+            <td th:text="${#numbers.formatDecimal(account_pos.average_open_price, 1, 'COMMA', 2, 'POINT')}"></td>
+            <td th:if="${account_pos.pnl < 0}"><strong class="text-danger"
+              th:text="${#numbers.formatDecimal(account_pos.pnl, 1, 'COMMA', 2, 'POINT')} + '%'" th:style="'color:red'"></strong></td>
+            <td th:if="${account_pos.pnl >= 0}"><strong class="text-success"
+              th:text="${#numbers.formatDecimal(account_pos.pnl, 1, 'COMMA', 2, 'POINT')} + '%'"></strong></td>
+            <td th:text="${account_pos.getExpiresAt()}"></td>
+            <td th:text="${#numbers.formatDecimal(account_pos.lastQuoteAsk, 1, 'COMMA', 2, 'POINT')}"></td>
+            <td th:text="${#numbers.formatDecimal(account_pos.lastQuoteBid, 1, 'COMMA', 2, 'POINT')}"></td>
+            <td><a class="btn btn-warning btn-sm shadow rounded" href="#" th:if="${#maps.containsKey(alertButtons, account_pos.symbol)}"
+              th:href="@{${alertButtons.get(account_pos.symbol)}}">Add Stop Loss</a></td>
+          </tr>
+          <tr>
+            <td>Cash</td>
+            <td th:text="${#numbers.formatDecimal(balances.cash_balance, 1, 'COMMA', 2, 'POINT')}"></td>
+          </tr>
+          <tr>
+            <td>derivative_buying_power</td>
+            <td th:text="${#numbers.formatDecimal(balances.derivative_buying_power, 1, 'COMMA', 2, 'POINT')}"></td>
+          </tr>
+          <tr>
+            <td>equity_buying_power</td>
+            <td th:text="${#numbers.formatDecimal(balances.equity_buying_power, 1, 'COMMA', 2, 'POINT')}"></td>
+          </tr>
+          <tr>
+            <td>used_derivative_buying_power</td>
+            <td th:text="${#numbers.formatDecimal(balances.used_derivative_buying_power, 1, 'COMMA', 2, 'POINT')}"></td>
+          </tr>
+          <tr>
+            <td>Buying Power Usage</td>
+            <td th:text="${#numbers.formatDecimal(balances.used_derivative_buying_power / (balances.used_derivative_buying_power + balances.derivative_buying_power), 1, 'COMMA', 3, 'POINT')}"></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <a class="btn btn-primary" href="#" th:href="@{/accounts}">Back</a>
+    </div>
+  </main>
+  <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
