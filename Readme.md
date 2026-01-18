@@ -1,6 +1,6 @@
-# Stock Market Potato - ThetaBot
+**Note:** This project is no longer maintained.
 
-> **Note:** This project is no longer maintained.
+# Stock Market Potato - ThetaBot
 
 ThetaBot is a Spring Boot application designed for automated trading and portfolio management, specifically integrated with the Tastytrade brokerage. It includes a web interface for user management, bot configuration, and trade monitoring.
 
@@ -74,13 +74,13 @@ The source code is organized into the following packages:
 
 The application is configured via `application.yml`.
 
-> **Important:** `application.yml` is not included in the repository to protect sensitive secrets.
-> 1. Copy `src/main/resources/application.example.yml` to `src/main/resources/application.yml`.
-> 2. Fill in your API credentials and keystore passwords in the new `application.yml`.
+**Important:** `application.yml` is not included in the repository to protect sensitive secrets.
+1. Copy `src/main/resources/application.example.yml` to `src/main/resources/application.yml`.
+2. Fill in your API credentials and keystore passwords in the new `application.yml`.
 
 For running tests, a similar configuration is required:
-> 1. Copy `src/test/resources/application.example.yml` to `src/test/resources/application.yml`.
-> 2. Ensure the credentials are set correctly for the test environment (specifically the certification environment credentials).
+1. Copy `src/test/resources/application.example.yml` to `src/test/resources/application.yml`.
+2. Ensure the credentials are set correctly for the test environment (specifically the certification environment credentials).
 
 Key settings include:
 
@@ -126,6 +126,8 @@ The project uses the Maven Wrapper for easy building.
 ```bash
 mvn javadoc:javadoc
 ```
+
+Docs are generated to `target\site\apidocs\index.html`
 
 ### Run
 
